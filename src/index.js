@@ -4,24 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const weatherData = {
-  date: 1525046400000,
-  temperature: {
-    max: 11,
-    min: 4,
-  },
-  wind: {
-    speed: 13,
-    direction: "s",
-  },
-  humidity: 30,
-  description: "Clear",
-  icon: "800",
-};
-
 ReactDOM.render(
   <React.StrictMode>
-    <App weatherData={weatherData} />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

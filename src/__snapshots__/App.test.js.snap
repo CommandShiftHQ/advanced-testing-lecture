@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App component renders 1`] = `
+<DocumentFragment>
+  <div
+    class="App"
+  >
+    <div
+      class="date"
+      data-testid="date-id"
+    >
+      Mon 30th Apr
+    </div>
+    <div
+      class="temperature"
+      data-testid="temperature-id"
+    >
+      11°c
+    </div>
+    <div
+      class="description"
+      data-testid="description-id"
+    >
+      Clear
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`App component shows error screen 1`] = `
+<DocumentFragment>
+  <div>
+    Sorry, something went wrong. Please refresh the page.
+  </div>
+</DocumentFragment>
+`;
+
+exports[`App component shows loading screen 1`] = `
+<DocumentFragment>
+  <div>
+    Loading...
+  </div>
+</DocumentFragment>
+`;
