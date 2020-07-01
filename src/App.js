@@ -3,6 +3,7 @@ import moment from "moment";
 import getForecastData from "./services/getForecast";
 import saveMood from "./services/saveMood";
 import "./App.css";
+import MoodForm from "./MoodForm";
 
 function App() {
   const [isLoading, setLoading] = useState(true);
@@ -80,23 +81,11 @@ function App() {
         </a>
       )}
       <br />
-      {isMoodCaptured ? (
-        <div>Thanks for sharing your mood.</div>
-      ) : (
-        <form className="search-form" onSubmit={handleSubmit}>
-          <input
-            className="search-input"
-            type="text"
-            placeholder="how are you feeling today?"
-            size="200"
-            onChange={handleInputChange}
-          />
-          <br />
-          <button name="go" className="submit-button" type="submit">
-            submit
-          </button>
-        </form>
-      )}
+      <MoodForm
+        isMoodCaptured={isMoodCaptured}
+        handleSubmit={handleSubmit}
+        handleInputChange={handleInputChange}
+      />
     </div>
   );
 }

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it renders 1`] = `
+<DocumentFragment>
+  <form
+    class="search-form"
+    data-testid="form"
+  >
+    <input
+      class="search-input"
+      placeholder="how are you feeling today?"
+      size="200"
+      type="text"
+    />
+    <br />
+    <button
+      class="submit-button"
+      name="go"
+      type="submit"
+    >
+      submit
+    </button>
+  </form>
+</DocumentFragment>
+`;
+
+exports[`it renders success when user submitted the form 1`] = `
+<DocumentFragment>
+  <div>
+    Thanks for sharing your mood.
+  </div>
+</DocumentFragment>
+`;
