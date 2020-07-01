@@ -17,35 +17,49 @@ const TEST_WEATHER_DATA = {
   icon: "800",
 };
 
-// best effort
-test('component renders', () => {
-  const { asFragment } = render(<App weatherData={TEST_WEATHER_DATA} />);
-  const component  = asFragment();
-  // when using snapshots always open the resulting snapshot file
-  // and visually check if the render is what you expect it to be!
-  expect(component).toMatchSnapshot(); 
+// tests from step 1 have been reducted to keep this example simple
+// in real-life you would keep those tests and add these new ones on top!
+test('renders umbrella affliate link when weather conditions are right', () => {
+  const RAINY_DAY_WITH_STRONG_WIND = {
+    date: 1525046400000,
+    temperature: {
+      max: 11,
+      min: 4,
+    },
+    wind: {
+      speed: 35,
+      direction: "s",
+    },
+    humidity: 30,
+    description: "Rainy",
+    icon: "800",
+  };
+  const { getByTestId } = render(<App weatherData={RAINY_DAY_WITH_STRONG_WIND} />);
+  const description = getByTestId("affiliate-umbrella");
+  expect(description).toHaveTextContent("Why don't you get a sturdy umbrella?");
 });
 
+test('doesnt render umbrella affliate link when weather is sunny', () => {
+  const SUNNY_DAY = {
+    date: 1525046400000,
+    temperature: {
+      max: 11,
+      min: 4,
+    },
+    wind: {
+      speed: 35,
+      direction: "s",
+    },
+    humidity: 30,
+    description: "Sunny",
+    icon: "800",
+  };
+  const { queryByTestId } = render(<App weatherData={SUNNY_DAY} />);
+  // why are we using query by?
+  // The standard getBy methods throw an error when they can't find an element, 
+  // so if you want to make an assertion that an element is not present in the DOM, 
+  // see: https://stackoverflow.com/a/52783201
 
-// you might just check test is in the document
-// naive effort
-test('renders weather status', () => {
-  const { getByText } = render(<App weatherData={TEST_WEATHER_DATA} />);
-  const weatherStatus = getByText(/Clear/i);
-  expect(weatherStatus).toBeInTheDocument();
-});
-
-// manually check each section is rendered correctly
-// highly specific tests 
-// a lot of effort!
-test('renders weather status', () => {
-  const { getByTestId } = render(<App weatherData={TEST_WEATHER_DATA} />);
-  const date = getByTestId("date-id");
-  expect(date).toHaveTextContent("Mon 30th Apr");
-
-  const temperature = getByTestId("temperature-id");
-  expect(temperature).toHaveTextContent("11°c");
-
-  const description = getByTestId("description-id");
-  expect(description).toHaveTextContent("Clear");
+  const description = queryByTestId("affiliate-umbrella");
+  expect(description).not.toBeInTheDocument();
 });
