@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import getForecastData from "./services/getForecast";
+import saveMood from "./services/saveMood";
 import "./App.css";
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
   const [weatherReport, setWeatherReport] = useState({});
 
   useEffect(() => {
-     const getForecast = async () => {
+    const getForecast = async () => {
       try {
         /* BEFORE
         const result = await axios({
@@ -17,7 +18,7 @@ function App() {
           url: ` https://mcr-codes-weather.herokuapp.com/forecast`,
         });
         */
-        // trick is to pull all your API interactions 
+        // trick is to pull all your API interactions
         // into separate modules which can be mocked via jest!
         const result = await getForecastData();
         setWeatherReport(result.data.forecasts[0]);
@@ -25,9 +26,28 @@ function App() {
       } catch (error) {
         setError(true);
       }
-    }
+    };
     getForecast();
   }, []);
+
+  const [mood, setMood] = useState("");
+  const [isMoodCaptured, setMoodCaptured] = useState(false);
+
+  const handleInputChange = (e) => {
+    setMood(e.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    setLoading(true);
+    event.preventDefault();
+    try {
+      await saveMood({ mood });
+    } catch (err) {
+      setError(true);
+    }
+    setMoodCaptured(true);
+    setLoading(false);
+  };
 
   if (isError) {
     return <div>Sorry, something went wrong. Please refresh the page.</div>;
@@ -38,10 +58,7 @@ function App() {
   }
 
   const displayUmbrellaLink =
-    weatherReport.description === "Rainy" &&
-    weatherReport.wind.speed >= 30; // 30 km/h
-
-    
+    weatherReport.description === "Rainy" && weatherReport.wind.speed >= 30; // 30 km/h
 
   return (
     <div className="App">
@@ -61,6 +78,24 @@ function App() {
         >
           Why don't you get a sturdy umbrella?
         </a>
+      )}
+      <br />
+      {isMoodCaptured ? (
+        <div>Thanks for sharing your mood.</div>
+      ) : (
+        <form className="search-form" onSubmit={handleSubmit}>
+          <input
+            className="search-input"
+            type="text"
+            placeholder="how are you feeling today?"
+            size="200"
+            onChange={handleInputChange}
+          />
+          <br />
+          <button name="go" className="submit-button" type="submit">
+            submit
+          </button>
+        </form>
       )}
     </div>
   );

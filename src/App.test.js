@@ -1,10 +1,12 @@
 import React from "react";
-import { render, wait } from "@testing-library/react";
+import { render, wait, fireEvent } from "@testing-library/react";
 import App from "./App";
 
 /* set up jest mock */
 import getForecastData from "./services/getForecast";
 jest.mock("./services/getForecast");
+import saveMood from "./services/saveMood";
+jest.mock("./services/saveMood");
 
 describe("App", () => {
   beforeEach(() => {
@@ -35,7 +37,7 @@ describe("App", () => {
   test("component shows loading screen", async () => {
     // api never resolves, it keeps in "pending" state
     getForecastData.mockReturnValue(new Promise(() => {}));
-    const { asFragment } = render(<App />); 
+    const { asFragment } = render(<App />);
     const component = asFragment();
     expect(component).toMatchSnapshot();
   });
@@ -52,7 +54,7 @@ describe("App", () => {
   test("component shows error screen", async () => {
     // api rejects with an error
     getForecastData.mockResolvedValue(Promise.reject("FAILED"));
-    const { asFragment, getByText } = render(<App />); 
+    const { asFragment, getByText } = render(<App />);
     await wait(() => expect(getByText(/wrong/i)).toBeInTheDocument());
     const component = asFragment();
     expect(component).toMatchSnapshot();
@@ -80,7 +82,7 @@ describe("App", () => {
           },
         ],
       },
-    })
+    });
     const { getByTestId, getByText } = render(<App />);
     await wait(() => expect(getByText("Rainy")).toBeInTheDocument());
     const description = getByTestId("affiliate-umbrella");
@@ -99,5 +101,26 @@ describe("App", () => {
     // see: https://stackoverflow.com/a/52783201
     const description = queryByTestId("affiliate-umbrella");
     expect(description).not.toBeInTheDocument();
+  });
+
+  test("it captures user input and sends it to the API", async () => {
+    const { getByText, getByRole } = render(<App />);
+    await wait(() => expect(getByText("Clear")).toBeInTheDocument());
+
+    const textbox = getByRole("textbox");
+    const button = getByRole("button", { name: /submit/i });
+
+    fireEvent.change(textbox, {
+      target: { value: "feeling great!" },
+    });
+    fireEvent.click(button);
+
+    expect(textbox.value).toBe("feeling great!");
+    await wait(() => {
+      expect(saveMood).toHaveBeenCalledTimes(1);
+      expect(saveMood).toHaveBeenCalledWith({
+        mood: "feeling great!",
+      });
+    });
   });
 });

@@ -23,6 +23,25 @@ exports[`App component renders 1`] = `
     >
       Clear
     </div>
+    <br />
+    <form
+      class="search-form"
+    >
+      <input
+        class="search-input"
+        placeholder="how are you feeling today?"
+        size="200"
+        type="text"
+      />
+      <br />
+      <button
+        class="submit-button"
+        name="go"
+        type="submit"
+      >
+        submit
+      </button>
+    </form>
   </div>
 </DocumentFragment>
 `;
